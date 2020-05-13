@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PaisService } from '../../services/pais.service';
 
 @Component({
   selector: 'app-template',
@@ -12,9 +13,20 @@ export class TemplateComponent implements OnInit {
     nombre: ''
   };
 
-  constructor() { }
+  paises: any[] = [];
+
+  constructor( private servicePais: PaisService ) { }
 
   ngOnInit(): void {
-  }
 
+    this.servicePais.getPaises()
+      .subscribe( paises => {
+        console.log(paises);
+        this.paises = paises;
+        this.paises.unshift({
+          nombre: 'Selecciona un País',
+          codigo: ''
+        });
+      } );
+  }
 }
