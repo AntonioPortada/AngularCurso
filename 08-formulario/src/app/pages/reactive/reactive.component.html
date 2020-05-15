@@ -1,23 +1,24 @@
 <h1>Hola Mundo</h1>
 <h4>Formularios <small> Reactivos </small></h4>
 <hr>
-<form autocomplete="off">
+<form [formGroup]="forma" (ngSubmit)="guardar()">
 
     <div>
 
         <div class="form-group row">
             <label class="col-2 col-form-label">Nombre</label>
-            <div class="col-8">
+            <div class="col">
 
-                <input class="form-control" type="text" placeholder="Nombre">
+                <input class="form-control" type="text" placeholder="Nombre" formControlName="nombre" [class.is-invalid]="nombreNoValido">
+                <small *ngIf="nombreNoValido" class="text-danger">5 caracteres minimo</small>
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-2 col-form-label">Apellido</label>
-            <div class="col-8">
+            <div class="col">
 
-                <input class="form-control" type="text" placeholder="Apellido">
+                <input class="form-control" type="text" placeholder="Apellido" formControlName="apellido">
             </div>
         </div>
 
@@ -25,17 +26,63 @@
 
     <div class="form-group row">
         <label class="col-2 col-form-label">Correo</label>
-        <div class="col-8">
+        <div class="col">
 
-            <input class="form-control" type="email" placeholder="Correo electrónico">
+            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email">
         </div>
     </div>
 
+    <div class="form-group row" formGroupName="direccion">
+        <label class="col-2 col-form-label">Direccion</label>
+        <div class="form-row col">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Distrito" formControlName="distrito">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Ciudad" formControlName="ciudad">
+            </div>
+        </div>
+    </div>
 
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Usuario</label>
+        <div class="col">
+
+            <input class="form-control" type="text" placeholder="Nombre de usuario" formControlName="usuario" [class.is-invalid]="usuarioNoValido">
+            <small *ngIf="usuarioNoValido" class="text-danger">Ese usuario ya existe!</small>
+            <small *ngIf="!usuarioNoValido" class="text-success">El usuario esta disponible!</small>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>PASATIEMPO</th>
+                        <th>BORRAR</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="pasatiempos">
+                    <tr *ngFor="let item of pasatimepos.controls; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                            <input class="form-control" type="text" [formControlName]="i">
+                        </td>
+                        <td>
+                            <button (click)="borrarPasatiempo(i)" class="btn btn-danger">Borrar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button (click)="agregarPasatiempos()" type="button" class="btn btn-block btn-primary mt-3">Agregar</button>
+        </div>
+    </div>
 
     <div class="form-group row">
         <label class="col-2 col-form-label">&nbsp;</label>
-        <div class="input-group col-md-8">
+        <div class="input-group col-md">
             <button type="submit" class="btn btn-outline-primary btn-block">
         Guardar
       </button>
@@ -43,3 +90,14 @@
     </div>
 
 </form>
+
+<hr>
+<pre>
+    Estado  del formulario : {{ forma.valid }}
+    <br>
+    Status: {{ forma.valid }}
+</pre>
+
+<pre>
+    {{ forma.value | json }}
+</pre>
